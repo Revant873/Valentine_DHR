@@ -367,6 +367,11 @@
     <source src="question.mp4" type="audio/mpeg">
   </audio>
 
+  <!-- ✅ ADDED ONLY: Shayri voice note -->
+  <audio id="sVoice" preload="auto">
+    <source src="shayri.mp4" type="audio/mp4">
+  </audio>
+
   <script>
     // Optional name via URL: ?name=HerName
     const params = new URLSearchParams(location.search);
@@ -393,6 +398,9 @@
     const card = document.getElementById("card");
     const bgm  = document.getElementById("bgm");
     const qVoice = document.getElementById("qVoice");
+
+    // ✅ ADDED ONLY: Shayri voice element
+    const sVoice = document.getElementById("sVoice");
 
     // Universe elements
     const loveUniverseBtn = document.getElementById("loveUniverseBtn");
@@ -436,12 +444,10 @@
       title.style.display = "block";
       questionBlock.style.display = "block";
 
-      // Autoplay voice note after user gesture (this click)
       try{
         qVoice.currentTime = 0;
         await qVoice.play();
       }catch(e){
-        // If it still blocks on some browsers, it will just not play
         console.log("Question voice autoplay blocked.");
       }
     });
@@ -483,11 +489,18 @@
       loveMsg.style.display = "block";
     });
 
-    // Shayri
-    readBtn.addEventListener("click", ()=>{
+    // ✅ CHANGED ONLY: Shayri click now also plays sVoice
+    readBtn.addEventListener("click", async ()=>{
       letterMsg.style.display = "block";
       popHearts(14);
       letterMsg.scrollIntoView({behavior:"smooth", block:"center"});
+
+      try{
+        sVoice.currentTime = 0;
+        await sVoice.play();
+      }catch(e){
+        console.log("Shayri voice play blocked or missing file.");
+      }
     });
 
     // Date idea
@@ -528,7 +541,6 @@
         universeStage.appendChild(s);
       }
 
-      // Keep your original phrase
       const phrase = ["I","love","you","Darling","💞","till","the","ends","of","the","Earth","💞"];
       const radius = 150;
       const step = 360 / phrase.length;
